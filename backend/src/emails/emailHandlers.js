@@ -24,16 +24,17 @@ export const sendWelcomeEmail = async (email, name, clientURL) => {
 
 export const sendOTPEmail = async (email, otp) => {
   try {
-    await resend.emails.send({
+    const response = await resend.emails.send({
       from: `${ENV.EMAIL_FROM_NAME} <${ENV.EMAIL_FROM}>`,
       to: email,
       subject: "Your Chatify OTP",
       html: createOTPEmailTemplate(otp),
     });
 
-    console.log("OTP email sent successfully");
+    console.log("RESEND RESPONSE:", JSON.stringify(response, null, 2));
   } catch (error) {
-    console.error("Error sending OTP email:", error);
+    console.error("RESEND FULL ERROR:", error);
+    console.error("RESEND ERROR JSON:", JSON.stringify(error, null, 2));
     throw new Error("Failed to send OTP email");
   }
 };
