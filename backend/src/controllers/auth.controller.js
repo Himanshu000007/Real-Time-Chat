@@ -52,6 +52,8 @@ export const signup = async (req, res) => {
         await sendOTPEmail(newUser.email, otp);
       } catch (error) {
         console.error("Failed to send OTP email:", error);
+        await User.findByIdAndDelete(newUser._id);
+        return res.status(500).json({ message: "Failed to send OTP email. Please try again later." });
       }
 
       res.status(201).json({

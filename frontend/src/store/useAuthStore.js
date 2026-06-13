@@ -39,7 +39,7 @@ export const useAuthStore = create((set, get) => ({
   signup: async (data, navigate) => {
     set({ isSigningUp: true });
     try {
-      const res = await axiosInstance.post("/auth/signup", data);
+      await axiosInstance.post("/auth/signup", data);
       toast.success("OTP sent to your email!");
       navigate("/verify-otp", { state: { email: data.email } });
     } catch (error) {

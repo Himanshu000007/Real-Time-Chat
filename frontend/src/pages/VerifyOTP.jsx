@@ -4,6 +4,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
 import { MailIcon, LoaderIcon, KeyIcon } from "lucide-react";
 import { GoogleLogin } from "@react-oauth/google";
+import toast from "react-hot-toast";
 
 function VerifyOTP() {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -11,7 +12,7 @@ function VerifyOTP() {
     const navigate = useNavigate();
     const email = state?.email;
 
-    const { verifyOTP, resendOTP, isVerifyingOTP, isResendingOTP } = useAuthStore();
+    const { verifyOTP, resendOTP, googleLogin, isVerifyingOTP, isResendingOTP } = useAuthStore();
 
     useEffect(() => {
         if (!email) {
@@ -112,7 +113,7 @@ function VerifyOTP() {
                                 <div className="w-full flex justify-center">
                                     <GoogleLogin
                                         onSuccess={(credentialResponse) => {
-                                            googleLogin(credentialResponse);
+                                            googleLogin(credentialResponse.credential);
                                         }}
                                         onError={() => {
                                             toast.error("Google Verification Failed");

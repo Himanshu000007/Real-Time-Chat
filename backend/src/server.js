@@ -17,6 +17,7 @@ import { connectDB } from "./lib/db.js"
 import { ENV } from "./lib/env.js"
 import { app, server } from "./lib/socket.js"
 import { generateToken } from "./lib/utils.js"
+import { clientUrl, isAllowedOrigin } from "./lib/cors.js"
 
 const __dirname = path.resolve()
 
@@ -30,14 +31,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// Sanitize CLIENT_URL (remove trailing slash)
-const clientUrl = ENV.CLIENT_URL?.endsWith("/") ? ENV.CLIENT_URL.slice(0, -1) : ENV.CLIENT_URL;
-
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow if origin is the configured CLIENT_URL, localhost, or if there's no origin (like server-to-server)
-      if (!origin || origin === clientUrl || origin.includes("localhost") || origin.includes("vercel.app")) {
+      if (isAllowedOrigin(origin)) {
         callback(null, true);
       } else {
         console.error("CORS Blocked for origin:", origin);
